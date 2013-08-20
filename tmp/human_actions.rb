@@ -1,11 +1,13 @@
-p "HumanActions module"
+puts "HumanActions module"
 
 module HumanActions
- def thinking
-   puts "Human thinking"
- end
+  puts "HumanActions module code"
 
- def sleeps
-   puts "Human sleeps"
- end
+  def thinking
+   "Human thinking"
+  end
+
+  def sleeps
+   "Human sleeps"
+  end
 end

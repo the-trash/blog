@@ -21,9 +21,11 @@ end
 **human_actions_exe.rb**
 
 ```ruby
-puts require './human_actions'
-puts require './human_actions'
-puts require './human_actions'
+current_root = File.expand_path File.dirname __FILE__
+
+puts require current_root + '/human_actions'
+puts require current_root + '/human_actions'
+puts require current_root + '/human_actions'
 ```
 
 Имеем слудующий результат:
@@ -42,3 +44,4 @@ false
 #### include
 
 include -- берет все методы из одного модуля и вносит их в указанный модуль. Является основным методом расширения классов. Это программный уровень.
+
