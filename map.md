@@ -78,22 +78,31 @@ logs.map(&:object_id)
 => [11996740, 11996700, 11996520]
 ```
 
+1) Когда ruby встречает амперсанд (&) в последнем аргументе вызова метода, то пытается превратить его в выполняемый блок кода (Proc).
+2) ruby, встречая амперсанд, превращает обьект в выполняемый блок через вызов метода #to_proc.
+
 ```
-class Display
+def ampersand_test_method
+  yield if block_given?
+end
+
+class ToSKlass
   def self.to_proc
-    lambda{ |x| puts(x) }
+    Proc.new{ |obj| obj.to_s }
   end
 end
 
-# proc { |*args| args[0].send(self, *args[1...args.size]) }
+class ToSKlass2
+  def self.to_s
+    "Class Name"
+  end
+end
 
-#def to_proc
-#  proc { |obj, *args| obj.send(self, *args) }
-#end
+amperand_test_method ToSKlass
+amperand_test_method &ToSKlass
+amperand_test_method &ToSKlass2
 
-greetings = ["Hi", "Hello", "Welcome"]
+a = [2, 45, 190]
 
-greetings.map(&Display)
-
-
+a.map(&ToSKlass)
 ```
