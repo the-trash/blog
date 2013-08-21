@@ -77,3 +77,17 @@ logs.map(&:object_id)
 ```ruby
 => [11996740, 11996700, 11996520]
 ```
+
+```
+class Display
+  def self.to_proc
+    lambda{ |x| puts(x) }
+  end
+end
+
+greetings = ["Hi", "Hello", "Welcome"]
+
+greetings.map(&Display)
+
+
+```
