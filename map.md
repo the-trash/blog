@@ -85,6 +85,12 @@ class Display
   end
 end
 
+# proc { |*args| args[0].send(self, *args[1...args.size]) }
+
+#def to_proc
+#  proc { |obj, *args| obj.send(self, *args) }
+#end
+
 greetings = ["Hi", "Hello", "Welcome"]
 
 greetings.map(&Display)
