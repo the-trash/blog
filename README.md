@@ -19,7 +19,7 @@ puts "hello world!"
 
 #### JS
 
-* Шаблон проектирования "Модуль"
+* [Шаблон проектирования "Модуль"](js_module_pattern.coffee)
 
 #### Ruby
 
