@@ -15,16 +15,16 @@ puts "hello world!"
 
 #### Разное
 
-* Подборка ссылок
+* [Подборка ссылок](links.md)
 
 #### JS
 
-* Шаблон проектирования "Модуль"
+* [Шаблон проектирования "Модуль"](js_module_pattern.coffee)
 
 #### Ruby
 
-* Методы require, include, load, autoload
-* Метод Map
-* Метод Inject
-* Метод Strftime
-* Разница во времени
+* [Методы require, include, load, autoload](require_include.md)
+* [Метод Map](map.md)
+* [Метод Inject](inject.md)
+* [Метод Strftime](strftime.md)
+* [Разница во времени](time_diff.md)
