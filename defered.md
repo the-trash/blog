@@ -14,7 +14,7 @@ Defered объекты -- средство отделить реализацию
 
 По-умолчанию состояние у такого объекта - **pending**.
 
-```js
+```coffeescript
 asynk_fu = ->
   defer = $.Deferred()
   console.log defer.state() # => pending
@@ -22,7 +22,7 @@ asynk_fu = ->
 
 2) В функции **asynk_fu** оформляется некий вызов (для наглядности асинхронный **setTimeout**), которая в результате выполнения должна перевести объект **defer** в состоняие **rejected** или **resolved**
 
-```js
+```coffeescript
 setTimeout ->
   defer.resolve()
 , 4000
@@ -30,7 +30,7 @@ setTimeout ->
 
 3) Функция **asynk_fu** должна вернуть **defer.promise()** в результате своего исполнения
 
-```js
+```coffeescript
 asynk_fu = ->
   return defer.promise()
 ```
@@ -39,7 +39,7 @@ asynk_fu = ->
 
 **Итого:**
 
-```js
+```coffeescript
 $ ->
   async_fu = ->
     defer = $.Deferred()
