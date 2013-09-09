@@ -13,13 +13,10 @@ puts "hello world!"
 
 ### Содержание
 
-#### Разное
-
-* [Подборка ссылок](links.md)
-
 #### JS
 
 * [Шаблон проектирования "Модуль"](js_module_pattern.coffee)
+* [Defered в JQ](defered.md)
 
 #### Ruby
 
@@ -28,3 +25,7 @@ puts "hello world!"
 * [Метод Inject](inject.md)
 * [Метод Strftime](strftime.md)
 * [Разница во времени](time_diff.md)
+
+#### Разное
+
+* [Подборка ссылок](links.md)
