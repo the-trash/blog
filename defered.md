@@ -68,6 +68,56 @@ resolved
 resolved
 ```
 
+#### Пример
+
+Чтобы любой функции, которая ожидает отдельных параметров, передать массив значений для используйте **Function.apply**.
+
+Первый аргемент этой функции - контекст исполнения. Второй - массив параметров.
+
+
+```haml
+.defered_test
+  = link_to 'Загрузить страны', '#', class: :countries_download
+  .countries
+```
+
+```coffeescript
+@compactArray = (array) -> array.filter (e) -> return e
+
+_iata_codes = "
+  MOW
+  LED
+  ASB
+"
+
+@countries_data = {}
+@promises_chain = []
+@iata_codes     = compactArray _iata_codes.split ' '
+
+@get_iata_name = (code) ->
+  $.ajax
+    url: "http://suggest.kupibilet.ru/suggest.json?term=#{code}"
+    dataType: 'jsonp'
+    contentType: 'application/json'
+    success: (data, status, response) ->
+      cname = data.data[0].name.ru
+      countries_data[code] = cname
+      console.log code, cname
+
+$ ->
+  $('.defered_test a').click ->
+    for code in iata_codes
+      promises_chain.push get_iata_name(code)
+
+    $.when.apply($, promises_chain).done ->
+      names = []
+      names.push(val) for key, val of countries_data
+      names = names.join ', '
+
+      $('.defered_test .countries').html(names).slideDown()
+      console.log 'Loading finished!'      
+```
+
 #### Ссылки:
 
 http://jquery.page2page.ru/index.php5/%D0%9E%D0%B1%D1%8A%D0%B5%D0%BA%D1%82_deferred
