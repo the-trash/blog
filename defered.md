@@ -145,6 +145,40 @@ $ ->
       console.log 'Loading finished!'      
 ```
 
+Как вариант. Можно заранее создать массив функций с заданным контекстом и параметрами. Для этого потребуется метод **bind**.
+
+```
+promises_chain.push get_iata_name.bind(@, code)
+```
+
+И только при необходимости выполнения, пробежаться по массиву, вызвать все методы массива и вернуть набор **defered** объектов.
+
+```coffeescript
+defs = promises_chain.map (fn) -> do fn
+
+$.when.apply($, defs).done ->
+  ...
+```
+
+**Итого:**
+
+```coffeescript
+$ ->
+  for code in iata_codes
+    promises_chain.push get_iata_name.bind(@, code)
+
+  $('.defered_test a').click ->
+    defs = promises_chain.map (fn) -> do fn
+    
+    $.when.apply($, defs).done ->
+      names = []
+      names.push(val) for key, val of countries_data
+      names = names.join ', '
+
+      $('.defered_test .countries').html(names).slideDown()
+      console.log 'Loading finished!'
+```
+
 #### Ссылки:
 
 http://jquery.page2page.ru/index.php5/%D0%9E%D0%B1%D1%8A%D0%B5%D0%BA%D1%82_deferred
