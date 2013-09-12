@@ -185,3 +185,220 @@ http://jquery.page2page.ru/index.php5/%D0%9E%D0%B1%D1%8A%D0%B5%D0%BA%D1%82_defer
 
 http://jquery.page2page.ru/index.php5/%D0%9E%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0_%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F_deferred
 
+
+Заметки:
+
+Логгер
+
+```coffeescript
+window.log = -> try console.log.apply(console, arguments)
+```
+
+```javascript
+window.log = function() {
+  try {
+    return console.log.apply(console, arguments);
+  } catch (_error) {}
+};
+```
+
+Шаг 1
+
+```coffeescript
+for index in [0...10]
+  setTimeout ->
+    log index
+  , 1000
+```
+
+через секунду даст 10 чисел "10". К тому момент когда выполнится код - index будет равен 10
+
+```javascript
+var index, _i;
+
+for (index = _i = 0; _i < 10; index = ++_i) {
+  setTimeout(function() {
+    return log(index);
+  }, 1000);
+}
+```
+
+Шаг 2
+
+```coffeescript
+for index in [0...10]
+  setTimeout ->
+    log index
+  , 1000
+```
+
+```javascript
+var index, _fn, _i;
+
+_fn = function(index) {
+  return setTimeout(function() {
+    return log(index);
+  }, 1000);
+};
+for (index = _i = 0; _i < 10; index = ++_i) {
+  _fn(index);
+}
+```
+
+Шаг 3
+
+```coffeescript
+for index in [0...10]
+  promise = do (index) ->
+    dfd = new $.Deferred()
+    
+    setTimeout ->
+      log index
+      dfd.resolve()
+    , 1000
+
+    dfd.promise()
+```
+
+```javascript
+var index, promise, _i;
+
+for (index = _i = 0; _i < 10; index = ++_i) {
+  promise = (function(index) {
+    var dfd;
+    dfd = new $.Deferred();
+
+    setTimeout(function() {
+      log(index);
+      return dfd.resolve();
+    }, 1000);
+
+    return dfd.promise();
+  })(index);
+}
+```
+
+Шаг 4
+
+```
+promises_ary = []
+
+for index in [0...10]
+  promise = do (index) ->
+    dfd = new $.Deferred()
+    
+    setTimeout ->
+      log index
+      dfd.resolve()
+    , 1000
+
+    dfd.promise()
+
+  promises_ary.push promise 
+
+log promises_ary
+```
+
+```
+# => [obj, obj, ...]
+```
+
+```
+var index, promise, promises_ary, _i;
+
+promises_ary = [];
+
+for (index = _i = 0; _i < 10; index = ++_i) {
+  promise = (function(index) {
+    var dfd;
+    dfd = new $.Deferred();
+
+    setTimeout(function() {
+      log(index);
+      return dfd.resolve();
+    }, 1000);
+
+    return dfd.promise();
+  })(index);
+
+  promises_ary.push(promise);
+}
+
+log(promises_ary);
+```
+
+Шаг 5
+
+```
+promises_ary = []
+
+for index in [0...10]
+  promise = do (index) ->
+    dfd = new $.Deferred()
+    
+    setTimeout ->
+      log index
+      dfd.resolve()
+    , 1000
+
+    dfd.promise()
+
+  promises_ary.push promise 
+
+$.when.apply($, promises_ary).done ->
+  log 'Promises Ary is Done'
+```
+
+Шаг 6
+
+```
+rand = (min, max) -> Math.floor(Math.random() * (max - min + 1) + min)
+
+promises_ary = []
+
+for index in [0...10]
+  promise = do (index) ->
+    dfd = new $.Deferred()
+    
+    setTimeout ->
+      log index
+      dfd.resolve()
+    , rand(1, 5) * 1000
+
+    dfd.promise()
+
+  promises_ary.push promise 
+
+$.when.apply($, promises_ary).done ->
+  log 'Promises Ary is Done'
+```
+
+```
+var index, promise, promises_ary, _i;
+
+rand = function(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+};
+
+promises_ary = [];
+
+for (index = _i = 0; _i < 10; index = ++_i) {
+  promise = (function(index) {
+    var dfd;
+    dfd = new $.Deferred();
+    
+    setTimeout(function() {
+      log(index);
+      return dfd.resolve();
+    }, rand(1, 5) * 1000);
+
+    return dfd.promise();
+  })(index);
+
+  promises_ary.push(promise);
+}
+
+$.when.apply($, promises_ary).done(function() {
+  return log('Promises Ary is Done');
+});
+```
