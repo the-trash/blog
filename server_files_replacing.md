@@ -18,3 +18,15 @@ Database
 
 > scp root@69.100.12.43:/home/USR/PATH/TO/DIR/DB_NAME.sql .
 
+**new server:**
+
+> scp ./DB_NAME.sql UserName@MyNewServer.com:/home/USR/PATH/TO/DIR/DB_NAME.sql
+
+> scp ./folder_name.tar UserName@MyNewServer.com:/home/USR/PATH/TO/DIR/folder_name.tar
+
+> mysql -u root -pPASSWORD DATEBASE_NAME < ./DB_NAME.sql
+
+
+> tar -xvf folder_name.tar
+
+
