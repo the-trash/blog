@@ -71,6 +71,8 @@ Singleton — порождающий шаблон, гарантирующий ч
   log User.double_voice()
 ```
 
+Имрпорт зависимости
+
 ```coffeescript
   User = do (JQ = $) ->
     fname = 'John'
