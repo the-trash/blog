@@ -94,13 +94,32 @@ Object.defineProperty newObject, "someKey",
 
 ```coffeescript
 Object.defineProperties newObject,   
-	  "someKey": 
-	    value: "Hello World"
-	    writable: true 
+  "someKey": 
+    value: "Hello World"
+    writable: true 
 
-	  "anotherKey":
-	    value: "Foo bar"
-	    writable: false 
+  "anotherKey":
+    value: "Foo bar"
+    writable: false
+```
+
+JS не поддерживает классов, в нем есть спеиальные функции-конструкторы, которые работают с объектами.
+
+Простым добавлением оператора new перед именем Функции мы момжем попросить JS вызвать специальную функцию, которая инстанцирует новый объект.
+
+Внутри конструктора **this** обозначает создаваемый объект
+
+```coffeescript
+User = (fname = 'John' , lname = 'Smith', words = 'Yo Ho Ho!') ->
+  @fname = fname
+  @lname = lname
+  @words = words
+  @voice = -> @words    
+  @
+
+u = new User
+log u
+log u.voice()
 ```
 
 ### Singlton
