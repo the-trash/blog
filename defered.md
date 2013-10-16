@@ -402,3 +402,19 @@ $.when.apply($, promises_ary).done(function() {
   return log('Promises Ary is Done');
 });
 ```
+
+```
+  # always
+  # done
+  # fail
+  # notify
+  # notifyWith
+  # pipe
+  # progress
+  # promise
+  # reject
+  # rejectWith
+  # resolve
+  # resolveWith
+  # state
+```
