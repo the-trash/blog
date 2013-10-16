@@ -4,7 +4,9 @@
 
 Объектный литерал не требует инстанцирования через **new*
 
-Объектный литерал может быть расширен путем определения нового свойства следующим способом: **myModule.newField = value;**
+Объектный литерал может быть расширен путем определения нового свойства следующим способом:
+
+**myModule.newField = value;**
 
 ```coffeescript
   user =
@@ -62,6 +64,44 @@ newObject = Object.create(null)
 
 Есть 4 базовых способа установить/получить значение полей объекта:
 
+Через точку
+
+```coffeescript
+newObject.someKey = "Hello World"
+log newObject.someKey
+```
+
+Через квадратные скобки
+
+```coffeescript
+newObject['someKey'] = "Hello World"
+log newObject['someKey']
+```
+
+Посредством метода defineProperty
+
+https://kangax.github.io/es5-compat-table
+
+```coffeescript
+Object.defineProperty newObject, "someKey",
+  value: "for more control of the property's behavior"
+  writable: true
+  enumerable: true
+  configurable: true
+```
+
+Посредством метода defineProperties
+
+```coffeescript
+Object.defineProperties newObject,   
+	  "someKey": 
+	    value: "Hello World"
+	    writable: true 
+
+	  "anotherKey":
+	    value: "Foo bar"
+	    writable: false 
+```
 
 ### Singlton
 
