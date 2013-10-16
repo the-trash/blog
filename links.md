@@ -6,6 +6,10 @@
 
 http://addyosmani.com/resources/essentialjsdesignpatterns/book/#modulepatternjavascript
 
+Всякие штучки
+
+http://true-coder.ru/javascript/karrirovanie-karring-v-javascript.html
+
 JS. Классы vs Прототипы
 
 http://habrahabr.ru/post/175029/
