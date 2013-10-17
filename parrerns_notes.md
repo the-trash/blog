@@ -240,7 +240,6 @@ log u.voice()
 
 Такой вариант значительно проще для чтения понимания, однако грозит сложностями переопределения функций. Поскольку все методы, которые вы бы хотели "подправить" по сути являются приватным.
 
-
 ### Singlton
 
 Singleton — порождающий шаблон, гарантирующий что в однопоточном приложении будет единственный экземпляр класса с глобальной точкой доступа.
@@ -307,3 +306,77 @@ log superMan.getInstance({ laser_view: true }).abilities
 
 * Должен быть ровно один экземпляр некоторого класса, легко доступный всем клиентам
 * Единственный экземпляр должен расширяться путем порождения подклассов, и клиентам нужно иметь возможность работать с расширенным экземпляром без модификации своего кода. (?)
+
+### Observer
+
+Обозреватель (субъект/сервер) контролирует список подчиненных объектов (объектов/клиентов) и уведомляет их об изменении своего состояния.
+
+Клиенты могут подписаться на отслеживание состояний сервера и отписаться, когда им это потребуется.
+
+Сервер обладает списком клиентов и методвами добавления и удаления клиентов
+Сервер обладает методом уведомления клиентов об изменении состояния
+У клиентов есть ссылка на наблюдаемый объект
+
+```coffeescript
+## COMMON
+_extend = (extension, obj) ->
+  for key of extension
+    obj[key] = extension[key]
+
+## OBSERVER LIST
+ObserverList = ->
+  @observerList = []
+
+ObserverList::Add = (obj) ->
+  @observerList.push obj
+
+ObserverList::Empty = ->
+  @observerList = []
+
+ObserverList::Count = ->
+  @observerList.length
+
+ObserverList::Get = (index) ->
+  @observerList[index]
+
+ObserverList::Insert = (obj, index) ->
+  pointer = -1
+  if index is 0
+    @observerList.unshift obj
+    pointer = index
+  else if index is @observerList.length
+    @observerList.push obj
+    pointer = index
+  pointer
+
+ObserverList::IndexOf = (obj, startIndex) ->
+  i = startIndex
+  pointer = -1
+  while i < @observerList.length
+    pointer = i  if @observerList[i] is obj
+    i++
+  pointer
+
+ObserverList::RemoveAt = (index) ->
+  if index is 0
+    @observerList.shift()
+  else
+    @observerList.pop() if index is @observerList.length - 1
+
+## SUBJECT
+Subject = ->
+  @observers = new ObserverList()
+
+Subject::AddObserver = (observer) ->
+  @observers.Add observer
+
+Subject::RemoveObserver = (observer) ->
+  @observers.RemoveAt @observers.IndexOf(observer, 0)
+
+Subject::Notify = (context) ->
+  observerCount = @observers.Count()
+  i = 0
+  while i < observerCount
+    @observers.Get(i).Update context
+    i++
+```
