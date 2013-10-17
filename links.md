@@ -2,13 +2,9 @@
 
 #### JavaScript
 
-Общие понятия JS и шаблоны проектирования
+Общие понятия JS и шаблоны проектирования http://addyosmani.com/resources/essentialjsdesignpatterns/book/#modulepatternjavascript
 
-http://addyosmani.com/resources/essentialjsdesignpatterns/book/#modulepatternjavascript
-
-Всякие штучки
-
-http://true-coder.ru/javascript/karrirovanie-karring-v-javascript.html
+Всякие штучки http://true-coder.ru/javascript/karrirovanie-karring-v-javascript.html
 
 JS. Классы vs Прототипы
 
