@@ -21,3 +21,7 @@ http://habrahabr.ru/post/192806/
 Серия скринкастов от Ильи Кантора
 
 http://learn.javascript.ru/nodejs-screencast
+
+#### Разное
+
+Слайды по принципам проектирования http://www.slideshare.net/AlexanderByndyu/ss-23582146
