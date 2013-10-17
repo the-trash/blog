@@ -245,6 +245,11 @@ log u.voice()
 
 Singleton — порождающий шаблон, гарантирующий что в однопоточном приложении будет единственный экземпляр класса с глобальной точкой доступа.
 
+Синглтон может быть полезен, когда в системе необходим один объект влияющий на другие компоненты системы. Не стоит злоупотреблять этим шаблоном.
+
+Синглтон создается только в момент непосредственного использования. Без потребности ресурсов до этого момента.
+Поэтому он имеет преимущество по сравнению с обычным объектом порожденным от какого-либо класса.
+Кроме того, за переменной требуется следить, что бы она была создана к тому моменту, когда будет впервые вызвана.
 
 ```coffeescript
 superMan = do ->
@@ -262,6 +267,29 @@ superMan = do ->
   
 log superMan.getInstance().uid
 log superMan.getInstance().getRand()
+```
+
+или так:
+
+```coffeescript
+@superMan = do ->
+  init = (abilities = {stell_skin: true}) ->
+    getRand = -> Math.random()
+
+    return {
+      fname: "Clark"
+      lname: "Kent"
+      uid:   getRand()
+      getRand: -> getRand()
+      abilities: abilities
+    }
+
+  getInstance: (abilities) ->
+    @instance ?= init(abilities)
+
+
+# log superMan.getInstance().abilities
+log superMan.getInstance({ laser_view: true }).abilities
 ```
 
 #### Плюсы
