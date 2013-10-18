@@ -319,27 +319,28 @@ log superMan.getInstance({ laser_view: true }).abilities
 
 ```coffeescript
 ## COMMON
-_extend = (extension, obj) ->
+extend_obj = (obj, extension) ->
   for key of extension
     obj[key] = extension[key]
 
 ## OBSERVER LIST
-ObserverList = ->
+@ObserverList = ->
   @observerList = []
+  @
 
-ObserverList::Add = (obj) ->
+@ObserverList::Add = (obj) ->
   @observerList.push obj
 
-ObserverList::Empty = ->
+@ObserverList::Empty = ->
   @observerList = []
 
-ObserverList::Count = ->
+@ObserverList::Count = ->
   @observerList.length
 
-ObserverList::Get = (index) ->
+@ObserverList::Get = (index) ->
   @observerList[index]
 
-ObserverList::Insert = (obj, index) ->
+@ObserverList::Insert = (obj, index) ->
   pointer = -1
   if index is 0
     @observerList.unshift obj
@@ -349,7 +350,7 @@ ObserverList::Insert = (obj, index) ->
     pointer = index
   pointer
 
-ObserverList::IndexOf = (obj, startIndex) ->
+@ObserverList::IndexOf = (obj, startIndex) ->
   i = startIndex
   pointer = -1
   while i < @observerList.length
@@ -357,26 +358,49 @@ ObserverList::IndexOf = (obj, startIndex) ->
     i++
   pointer
 
-ObserverList::RemoveAt = (index) ->
+@ObserverList::RemoveAt = (index) ->
   if index is 0
     @observerList.shift()
   else
-    @observerList.pop() if index is @observerList.length - 1
+    @observerList.pop() if index is ObserverList.length - 1
 
 ## SUBJECT
-Subject = ->
+@Subject = ->
   @observers = new ObserverList()
+  @
 
-Subject::AddObserver = (observer) ->
+@Subject::AddObserver = (observer) ->
   @observers.Add observer
 
-Subject::RemoveObserver = (observer) ->
+@Subject::RemoveObserver = (observer) ->
   @observers.RemoveAt @observers.IndexOf(observer, 0)
 
-Subject::Notify = (context) ->
+@Subject::Notify = (msg) ->
   observerCount = @observers.Count()
   i = 0
   while i < observerCount
-    @observers.Get(i).Update context
+    @observers.Get(i).Update msg
     i++
+
+## Observer
+@Observer = -> @
+@Observer::Update = (msg) ->
+  @html msg
+
+$ =>
+  # Build server
+  @kontrol = $ '#kontrol'
+  extend_obj(@kontrol, new Subject)
+
+  # Build clients
+  for i in [1..4]
+    @watcher = $ "#watcher_#{i}"
+    extend_obj(@watcher, new Observer)
+
+    # Add client to Server 
+    @kontrol.AddObserver @watcher
+
+  # Notify clients about server changes
+  @kontrol.on 'click', =>
+    @kontrol.Notify('Button was clicked!')
 ```
