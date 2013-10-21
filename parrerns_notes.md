@@ -426,3 +426,71 @@ subscribe "EVENT_NAME", (data) ->
 subscribe "EVENT2_NAME", (data) ->
   # do anything with event 2
 ```
+
+### Mediator (посредник)
+
+Посредник - нейтральная сторона, которая помогает в решении разногласий и конфликтов. Помогает нескольким объектам "договариваться".
+
+Посредник используется там, где возникает слишком тесная связь между элементами системы.
+
+Посредник способствует уменьшению связей между объектами и централизации этих связей. Так же он может помочь нам в решении задачи повторного использования кода.
+
+Посредник, как и диспетчерская башня в аэропорту, собирает всю информацию от самолетов и управляет их поведением. Это намного более выгодно, чем предоставить самолетам общаться между собой самостоятельно.
+
+```coffeescript
+@mediator = do ->
+  # Storage for topics that can be broadcast or listened to
+  topics = {}
+  
+  # Subscribe to a topic, supply a callback to be executed
+  # when that topic is broadcast to
+  subscribe = (topic, fn) ->
+    topics[topic] = [] unless topics[topic]
+    topics[topic].push
+      context:  @
+      callback: fn
+    @
+
+  # Publish/broadcast an event to the rest of the application
+  publish = (topic) ->
+    return false unless topics[topic]
+    args = undefined
+    
+    i    = 0
+    len  = topics[topic].length
+    args = Array::slice.call(arguments, 1)
+
+    while i < len
+      subscription = topics[topic][i]
+      subscription.callback.apply subscription.context, args
+      i++
+    @
+
+  publish:   publish
+  subscribe: subscribe
+  installTo: (obj) ->
+    obj.subscribe = subscribe
+    obj.publish   = publish
+
+$ ->
+  mediator.subscribe "alert_event", (data = {}) ->
+    log "alert!", data
+
+  mediator.publish "alert_event", {text: "Hello world!"}
+  mediator.publish "alert_event", {text: "it's me"}
+  mediator.publish "alert_event", {text: "YAhoo!"}
+  mediator.publish "alert_event"
+
+```
+
+#### Плюсы
+
+Главным преимуществом посредника является то, что он существенно снижает сложность в системах с большим кол-вом взаимосвязей. Особенно это заметно в системах с использованием связей один-ко-многим, многие-ко-многим.
+
+#### Минусы
+
+Главный минус в том, что в системе появляется единая точка отказа.
+
+Появляется некоторое снижение производительности из-за дополнительного звена, через которое взаимодействуют объекты.
+
+Из-за природы слабой связи трубно предсказать, как система будет себя вести в момент подачи широковещательного сообщения.
