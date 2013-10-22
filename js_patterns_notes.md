@@ -493,4 +493,161 @@ $ ->
 
 * Появляется некоторое снижение производительности из-за дополнительного звена, через которое взаимодействуют объекты.
 
-* Из-за природы слабой связи трубно предсказать, как система будет себя вести в момент подачи широковещательного сообщения.
+* Из-за природы слабой связи трудно предсказать, как система будет себя вести в момент подачи широковещательного сообщения.
+
+### Расширенный посредник
+
+```coffeescript
+# Pass in a context to attach our Mediator to. 
+# By default this will be the window object
+do (root = window) ->
+  guidGenerator = -> rand(1, 1000)
+  
+  # Our Subscriber constructor
+  Subscriber = (fn, options, context) ->
+    unless @ instanceof Subscriber
+      new Subscriber(fn, context, options)
+    else
+      # guidGenerator() is a function that generates 
+      # GUIDs for instances of our Mediators Subscribers so
+      # we can easily reference them later on. We're going
+      # to skip its implementation for brevity
+      @id = guidGenerator()
+      @fn = fn
+      @options = options
+      @context = context
+      @topic = null
+
+  # Let's model the Topic.
+  # JavaScript lets us use a Function object as a 
+  # conjunction of a prototype for use with the new 
+  # object and a constructor function to be invoked.
+  @Topic = (namespace) ->
+    unless @ instanceof Topic
+      new Topic(namespace)
+    else
+      @namespace = namespace or ""
+      @_callbacks = []
+      @_topics = []
+      @stopped = false
+
+  # Define the prototype for our topic, including ways to
+  # add new subscribers or retrieve existing ones.
+
+  # Add a new subscriber
+  # Define the prototype for our topic, including ways to
+  # add new subscribers or retrieve existing ones.
+  Topic:: =
+    # Add a new subscriber 
+    AddSubscriber: (fn, options, context) ->
+      callback = new Subscriber(fn, options, context)
+      @_callbacks.push callback
+      callback.topic = this
+      callback
+
+    StopPropagation: ->
+      @stopped = true
+
+    GetSubscriber: (identifier) ->
+      x = 0
+      y = @_callbacks.length
+
+      while x < y
+        return @_callbacks[x]  if @_callbacks[x].id is identifier or @_callbacks[x].fn is identifier
+        x++
+      for z of @_topics
+        if @_topics.hasOwnProperty(z)
+          sub = @_topics[z].GetSubscriber(identifier)
+          return sub  if sub isnt `undefined`
+
+    AddTopic: (topic) ->
+      @_topics[topic] = new Topic(((if @namespace then @namespace + ":" else "")) + topic)
+
+    HasTopic: (topic) ->
+      @_topics.hasOwnProperty topic
+
+    ReturnTopic: (topic) ->
+      @_topics[topic]
+
+    RemoveSubscriber: (identifier) ->
+      unless identifier
+        @_callbacks = []
+        for z of @_topics
+          @_topics[z].RemoveSubscriber identifier  if @_topics.hasOwnProperty(z)
+      y = 0
+      x = @_callbacks.length
+
+      while y < x
+        if @_callbacks[y].fn is identifier or @_callbacks[y].id is identifier
+          @_callbacks[y].topic = null
+          @_callbacks.splice y, 1
+          x--
+          y--
+        y++
+
+    Publish: (data) ->
+      y = 0
+      x = @_callbacks.length
+
+      while y < x
+        callback = @_callbacks[y]
+        l = undefined
+        callback.fn.apply callback.context, data
+        l = @_callbacks.length
+        if l < x
+          y--
+          x = l
+        y++
+      for x of @_topics
+        @_topics[x].Publish data  if @_topics.hasOwnProperty(x)  unless @stopped
+      @stopped = false
+
+  @Mediator = ->
+    unless @ instanceof Mediator
+      new Mediator()
+    else
+      @_topics = new Topic ''
+
+  Mediator:: =
+    GetTopic: (namespace) ->
+      topic = @_topics
+      namespaceHierarchy = namespace.split(":")
+      return topic  if namespace is ""
+      if namespaceHierarchy.length > 0
+        i = 0
+        j = namespaceHierarchy.length
+
+        while i < j
+          topic.AddTopic namespaceHierarchy[i]  unless topic.HasTopic(namespaceHierarchy[i])
+          topic = topic.ReturnTopic(namespaceHierarchy[i])
+          i++
+      topic
+
+    Subscribe: (topiclName, fn, options, context) ->
+      options = options or {}
+      context = context or {}
+      topic = @GetTopic(topicName)
+      sub = topic.AddSubscriber(fn, options, context)
+      sub
+
+    
+    # Returns a subscriber for a given subscriber id / named function and topic namespace
+    GetSubscriber: (identifier, topic) ->
+      @GetTopic(topic or "").GetSubscriber identifier
+
+    
+    # Remove a subscriber from a given topic namespace recursively based on
+    # a provided subscriber id or named function.
+    Remove: (topicName, identifier) ->
+      @GetTopic(topicName).RemoveSubscriber identifier
+
+    Publish: (topicName) ->
+      args = Array::slice.call(arguments, 1)
+      topic = @GetTopic(topicName)
+      args.push topic
+      @GetTopic(topicName).Publish args
+
+  root.Mediator = Mediator
+  Mediator.Topic = Topic
+  Mediator.Subscriber = Subscriber
+```
