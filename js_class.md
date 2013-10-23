@@ -85,23 +85,39 @@ function Author(){
 Author.prototype = new User('John');
 author_1 = new Author;
 
-console.log(author_1 instanceof User);   // true
-console.log(author_1 instanceof Author); // true
+console.log("=======================");
+console.log(author_1 instanceof Author);      // true
+console.log(author_1 instanceof User);        // true
+console.log(User.isPrototypeOf(author_1));    // false (>>>> 1) WHY? <<<<)
+console.log(author_1.constructor);            // User(_fname)
+console.log(author_1.__proto__);              // User { fname="John"} 
+console.log(Object.getPrototypeOf(author_1)); // User { fname="John"}
+console.log(author_1.constructor.prototype);  // User {}
 
 Author.prototype = new User('Alex');
 author_2 = new Author;
 
-console.log(author_1 instanceof User);   // true
-console.log(author_1 instanceof Author); // false
+console.log("=======================");
+console.log(author_1 instanceof Author);      // false  (>>>> 2) WHY? <<<<)
+console.log(author_1 instanceof User);        // true
+console.log(User.isPrototypeOf(author_1));    // false
+console.log(author_1.constructor);            // User(_fname)
+console.log(author_1.__proto__);              // User { fname="John"} 
+console.log(Object.getPrototypeOf(author_1)); // User { fname="John"}
+console.log(author_1.constructor.prototype);  // User {}
 
-console.log(author_2 instanceof User);   // true
-console.log(author_2 instanceof Author); // true
+console.log("=======================");
+console.log(author_2 instanceof Author);      // true
+console.log(author_2 instanceof User);        // true
+console.log(User.isPrototypeOf(author_2));    // false
+console.log(author_2.constructor);            // User(_fname)
+console.log(author_2.__proto__);              // User { fname="Alex"}
+console.log(Object.getPrototypeOf(author_2)); // User { fname="John"}
+console.log(author_2.constructor.prototype);  // User {}
 
-console.log(author_1.__proto__); // User {fname: "John"}
-console.log(author_2.__proto__); // User {fname: "John"}
-
+console.log("=======================");
 console.log(author_1); // User {book: "Magick of JS", fname: "John"}
-console.log(author_2); // User {book: "Magick of JS", fname: "John"}
+console.log(author_2); // User {book: "Magick of JS", fname: "Alex"}
 ```
 
 **Вывод:** переустановка свойства **prototype** ломает определение текущего класса.
