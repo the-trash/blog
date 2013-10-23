@@ -498,38 +498,44 @@ $ ->
 ### Расширенный посредник
 
 ```coffeescript
+# @compactArray = (array) -> array.filter (e) -> return e
+@rand = (min, max) -> Math.floor(Math.random() * (max - min + 1) + min)
+
 # Pass in a context to attach our Mediator to. 
 # By default this will be the window object
-do (root = window) ->
+do (scope = window) ->
   guidGenerator = -> rand(1, 1000)
-  
-  # Our Subscriber constructor
-  Subscriber = (fn, options, context) ->
-    unless @ instanceof Subscriber
-      new Subscriber(fn, context, options)
-    else
-      # guidGenerator() is a function that generates 
-      # GUIDs for instances of our Mediators Subscribers so
-      # we can easily reference them later on. We're going
-      # to skip its implementation for brevity
-      @id = guidGenerator()
-      @fn = fn
-      @options = options
-      @context = context
-      @topic = null
 
-  # Let's model the Topic.
-  # JavaScript lets us use a Function object as a 
-  # conjunction of a prototype for use with the new 
-  # object and a constructor function to be invoked.
+  @Mediator = ->
+    # Check for call via *new* operator
+    unless @ instanceof Mediator
+      new Mediator()
+    else
+      @_topics = new Topic ''
+    @
+
   @Topic = (namespace) ->
+    # Check for call via *new* operator
     unless @ instanceof Topic
       new Topic(namespace)
     else
-      @namespace = namespace or ""
+      @namespace  = namespace or ""
       @_callbacks = []
-      @_topics = []
-      @stopped = false
+      @_topics    = []
+      @stopped    = false
+    @
+
+  Subscriber = (fn, options, context) ->
+    # Check for call via *new* operator
+    unless @ instanceof Subscriber
+      new Subscriber(fn, context, options)
+    else
+      @id      = guidGenerator()
+      @fn      = fn
+      @options = options
+      @context = context
+      @topic   = null
+    @
 
   # Define the prototype for our topic, including ways to
   # add new subscribers or retrieve existing ones.
@@ -602,17 +608,11 @@ do (root = window) ->
         @_topics[x].Publish data  if @_topics.hasOwnProperty(x)  unless @stopped
       @stopped = false
 
-  @Mediator = ->
-    unless @ instanceof Mediator
-      new Mediator()
-    else
-      @_topics = new Topic ''
-
   Mediator:: =
     GetTopic: (namespace) ->
       topic = @_topics
       namespaceHierarchy = namespace.split(":")
-      return topic  if namespace is ""
+      return topic if namespace is ""
       if namespaceHierarchy.length > 0
         i = 0
         j = namespaceHierarchy.length
@@ -623,19 +623,17 @@ do (root = window) ->
           i++
       topic
 
-    Subscribe: (topiclName, fn, options, context) ->
+    Subscribe: (topicName, fn, options, context) ->
       options = options or {}
       context = context or {}
       topic = @GetTopic(topicName)
       sub = topic.AddSubscriber(fn, options, context)
       sub
-
     
     # Returns a subscriber for a given subscriber id / named function and topic namespace
     GetSubscriber: (identifier, topic) ->
       @GetTopic(topic or "").GetSubscriber identifier
 
-    
     # Remove a subscriber from a given topic namespace recursively based on
     # a provided subscriber id or named function.
     Remove: (topicName, identifier) ->
@@ -647,7 +645,18 @@ do (root = window) ->
       args.push topic
       @GetTopic(topicName).Publish args
 
-  root.Mediator = Mediator
-  Mediator.Topic = Topic
+  scope.Mediator      = Mediator
+  Mediator.Topic      = Topic
   Mediator.Subscriber = Subscriber
+
+$ ->
+  mediator = new Mediator
+
+  displayChat = -> log 'Display chat'
+  logChat     = -> log 'logChat'
+
+  mediator.Subscribe "newMessage", displayChat
+  mediator.Subscribe "newMessage", logChat
+
+  mediator.Publish "newMessage", { msg: "Hello world!" }
 ```
