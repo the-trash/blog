@@ -125,3 +125,33 @@ log(author_2); // User {book: "Magick of JS", fname: "Alex"}
 ```
 
 **Вывод:** переустановка свойства **prototype** ломает определение текущего класса.
+
+#### Пример 4
+
+В этом примере пока не понятно, откуда author_1 знает, что он принаделжит к Авторам
+
+```javascript
+function log(){ console.log.apply(console, arguments) }
+
+function User(_fname){
+    this.fname = _fname;
+    return this;
+}
+
+function Author(){
+    this.book = "Magick of JS";
+    return this;
+}
+
+Author.prototype = new User('John');
+author_1 = new Author;
+
+log(author_1);              // User { book="Magick of JS", fname="John"}
+log(author_1.__proto__);    // User { fname="John"}
+log(author_1.constructor);  // User(_fname)
+
+log(author_1 instanceof Author); // true
+
+// How author_1 kowns that it's an Author? Where is property?
+// Can I find it in web inspector? Or it's hidden value?
+```
