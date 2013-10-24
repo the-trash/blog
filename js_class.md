@@ -72,6 +72,8 @@ console.log(author); // User {book: "Magick of JS", fname: "John"}
 Попробуем поиграть с prototype
 
 ```javascript
+function log(){ console.log.apply(console, arguments) }
+
 function User(_fname){
     this.fname = _fname;
     return this;
@@ -85,39 +87,41 @@ function Author(){
 Author.prototype = new User('John');
 author_1 = new Author;
 
-console.log("=======================");
-console.log(author_1 instanceof Author);      // true
-console.log(author_1 instanceof User);        // true
-console.log(User.isPrototypeOf(author_1));    // false (>>>> 1) WHY? <<<<)
-console.log(author_1.constructor);            // User(_fname)
-console.log(author_1.__proto__);              // User { fname="John"} 
-console.log(Object.getPrototypeOf(author_1)); // User { fname="John"}
-console.log(author_1.constructor.prototype);  // User {}
+log("=======================");
+log(author_1 instanceof Author);      // true
+log(author_1 instanceof User);        // true
+log(User.prototype);                  // User {}
+log(User.isPrototypeOf(author_1));    // false
+log(User.prototype.isPrototypeOf(author_1)); // true (>>>> 1) WHY? <<<<)
+log(author_1.constructor);            // User(_fname)
+log(author_1.__proto__);              // User { fname="John"} 
+log(Object.getPrototypeOf(author_1)); // User { fname="John"}
+log(author_1.constructor.prototype);  // User {}
 
 Author.prototype = new User('Alex');
 author_2 = new Author;
 
-console.log("=======================");
-console.log(author_1 instanceof Author);      // false  (>>>> 2) WHY? <<<<)
-console.log(author_1 instanceof User);        // true
-console.log(User.isPrototypeOf(author_1));    // false
-console.log(author_1.constructor);            // User(_fname)
-console.log(author_1.__proto__);              // User { fname="John"} 
-console.log(Object.getPrototypeOf(author_1)); // User { fname="John"}
-console.log(author_1.constructor.prototype);  // User {}
+log("=======================");
+log(author_1 instanceof Author);      // false  (>>>> 2) WHY? <<<<)
+log(author_1 instanceof User);        // true
+log(User.prototype.isPrototypeOf(author_1));    // true
+log(author_1.constructor);            // User(_fname)
+log(author_1.__proto__);              // User { fname="John"} 
+log(Object.getPrototypeOf(author_1)); // User { fname="John"}
+log(author_1.constructor.prototype);  // User {}
 
-console.log("=======================");
-console.log(author_2 instanceof Author);      // true
-console.log(author_2 instanceof User);        // true
-console.log(User.isPrototypeOf(author_2));    // false
-console.log(author_2.constructor);            // User(_fname)
-console.log(author_2.__proto__);              // User { fname="Alex"}
-console.log(Object.getPrototypeOf(author_2)); // User { fname="John"}
-console.log(author_2.constructor.prototype);  // User {}
+log("=======================");
+log(author_2 instanceof Author);      // true
+log(author_2 instanceof User);        // true
+log(User.prototype.isPrototypeOf(author_2));    // true
+log(author_2.constructor);            // User(_fname)
+log(author_2.__proto__);              // User { fname="Alex"}
+log(Object.getPrototypeOf(author_2)); // User { fname="John"}
+log(author_2.constructor.prototype);  // User {}
 
-console.log("=======================");
-console.log(author_1); // User {book: "Magick of JS", fname: "John"}
-console.log(author_2); // User {book: "Magick of JS", fname: "Alex"}
+log("=======================");
+log(author_1); // User {book: "Magick of JS", fname: "John"}
+log(author_2); // User {book: "Magick of JS", fname: "Alex"}
 ```
 
 **Вывод:** переустановка свойства **prototype** ломает определение текущего класса.
