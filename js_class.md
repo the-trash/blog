@@ -124,7 +124,21 @@ log(author_1); // User {book: "Magick of JS", fname: "John"}
 log(author_2); // User {book: "Magick of JS", fname: "Alex"}
 ```
 
+* http://jsfiddle.net/p88UP/
+
 **Вывод:** переустановка свойства **prototype** ломает определение текущего класса.
+
+#### Работа оператора new
+
+Приблизительно оператор new работает так:
+
+```javascript
+var x = new F();                // approximately the same as this:
+x = Object.create(F.prototype); // x inherits from the prototype of F
+F.call(x);                      // F is called with x as 'this'
+```
+
+* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new
 
 #### Пример 4
 
