@@ -169,3 +169,14 @@ log(author_1 instanceof Author); // true
 // How author_1 kowns that it's an Author? Where is property?
 // Can I find it in web inspector? Or it's hidden value?
 ```
+
+* Свойство prototype - обычное свойство объекта
+* Атрибут prototype устанавливается в момент инициализации
+* Прототип объекта созданного через new - значение свойства prototype конструктора.
+* Прототип объекта созданного через Object.create(ProtoName) становится первый аргумент.
+* Объекты созданные через new - обычно наследуют свойство constructor (ссылка на ф-ию конструктор которая создала объект)
+
+#### Способы получить имя прототипа
+
+* Object.getPrototypeOf(obj) // ECMA3
+* obj.constructor.prototype
