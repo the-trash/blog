@@ -497,6 +497,36 @@ $ ->
 
 ### Расширенный посредник
 
+Следующая конструкция всегда вернет объект типа Subscriber
+
+```coffeescript
+function guidGenerator() { return Math.random(); }
+
+function Subscriber(fn, context, options){
+    if ( !(this instanceof Subscriber) ) {
+        // Subscriber(cb, window, {x: 1})
+        return new Subscriber(fn, context, options);
+    }else{
+        // new Subscriber(cb, window, {x: 1})
+        this.id = guidGenerator();
+        this.fn = fn;
+        this.options = options;
+        this.context = context;
+        this.topic = null;
+    }
+  return this;
+}
+
+function cb(){ return "callback"; }
+console.log(new Subscriber(cb, window, {x: 3}) );
+console.log(new Subscriber(cb, window, {x: 4}) );
+console.log(new Subscriber(cb, window, {x: 5}) );
+
+console.log( Subscriber(cb, window, {x: 1}) );
+console.log( Subscriber(cb, window, {x: 2}) );
+console.log( Subscriber(cb, window, {x: 3}) );
+```
+
 ```coffeescript
 # @compactArray = (array) -> array.filter (e) -> return e
 @rand = (min, max) -> Math.floor(Math.random() * (max - min + 1) + min)
@@ -528,7 +558,7 @@ do (scope = window) ->
   Subscriber = (fn, options, context) ->
     # Check for call via *new* operator
     unless @ instanceof Subscriber
-      new Subscriber(fn, context, options)
+      new Subscriber(fn, options, context)
     else
       @id      = guidGenerator()
       @fn      = fn
@@ -559,7 +589,7 @@ do (scope = window) ->
       y = @_callbacks.length
 
       while x < y
-        return @_callbacks[x]  if @_callbacks[x].id is identifier or @_callbacks[x].fn is identifier
+        return @_callbacks[x] if @_callbacks[x].id is identifier or @_callbacks[x].fn is identifier
         x++
       for z of @_topics
         if @_topics.hasOwnProperty(z)
