@@ -690,3 +690,51 @@ $ ->
 
   mediator.Publish "newMessage", { msg: "Hello world!" }
 ```
+
+### Прототип (Prototype)
+
+Прототип - шаблон, который создает объекты, используя клонирование существующего объекта, который выступает в качестве шаблона.
+
+В литературе на связанной с JS мы можем встеретится с классами при описании шаблона Прототип. Однако, в JS мы можем не опираться на подобные вещи и использовать сильные стороны языка JS.
+
+Мы будем просто создавать копии существующих функциональных объектов.
+
+Кроме своей простоты этот шаблон позволит нам существенно выиграть в производительности, поскольку функции добавляемые в базовый объект распространяются на все дочерние элементы (по ссылке). А не дублирует эти методы в каждый новый создаваемый объект.
+
+ECMAS5 для использованиея прототипного наследования требует использования метода **Object.create( prototype, optionalDescriptorObjects )**. Вспомним как он работает
+
+```coffeescript
+myCar =
+  name: "Ford Escort"
+  drive: ->
+    console.log "Weeee. I'm driving!"
+  panic: ->
+    console.log "Wait. How do you stop this thing?"
+
+yourCar = Object.create(myCar)
+console.log yourCar.name
+```
+
+Рассмотрим пример, где кроме прототипного объекта передается список параметров.
+
+```coffeescript
+vehicle = getModel: ->
+  console.log "The model of this vehicle is.." + @model
+
+car = Object.create(vehicle,
+  id:
+    value: 1
+    # writable:false, configurable:false by default
+    enumerable: true
+
+  model:
+    value: "Ford"
+    enumerable: true
+)
+
+console.log car
+```
+
+Выше аргументы функции передаются в том же формате, в котором их используют методы:  **Object.defineProperties**, **Object.defineProperty**
+
+Однако, важно отметить, что прототипное наследование может привести к неприятностям с перечисляемыми свойствами объектов и при использовании метода hasOwnProperty()
