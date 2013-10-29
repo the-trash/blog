@@ -8,6 +8,8 @@
 
 Всякие штучки http://true-coder.ru/javascript/karrirovanie-karring-v-javascript.html
 
+Сергей Чикуёнок блог  http://chikuyonok.ru/2010/11/optimization-story/
+
 JS. Классы vs Прототипы
 
 http://habrahabr.ru/post/175029/
