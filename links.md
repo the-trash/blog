@@ -10,6 +10,8 @@
 
 Сергей Чикуёнок блог  http://chikuyonok.ru/2010/11/optimization-story/
 
+Блог Акеллы http://cssing.org.ua
+
 JS. Классы vs Прототипы
 
 http://habrahabr.ru/post/175029/
