@@ -105,3 +105,5 @@
 * colour [калэ]
 * a son [сан]
 * to come [кам]
+
+http://english-info.ucoz.ru/index/0-5
