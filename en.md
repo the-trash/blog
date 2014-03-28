@@ -185,6 +185,34 @@
 * to cut [и:т]
 * meat [ми:т]
 
+**буквосочетание «еа» произносим как краткое [э] перед согласными d, ih, l**
 
+* bread [брэд]
+* health [хэлС]
+* leather [лэЗ;з] 
+* death [дэС] 
+* great [грэйт]
+
+* a coat [кoут] 
+* a boat [бoут] 
+* an oak [oук] 
+* soap [соуп] 
+* a toe [тoу]
+
+* a day [дэй] 
+* to play [плэй]
+
+* to pay [пай] 
+* main [мэйн] 
+* daily [дэйли]
+
+* a suit [сьют]
+* due [дью] 
+* issue [исью]
+
+* a pie [пай]
+* a tie [тай] 
+* to lie [лай]
+* rye [рай]
  
 http://english-info.ucoz.ru/index/0-5
