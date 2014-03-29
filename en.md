@@ -345,4 +345,23 @@ dew [дью]
 
 * poor [пуэ]
 
+### еа + r
+
+**[йэ]**
+
+* near [ниэ]
+* clear [клиэ]
+* fear [фиэ]
+
+**[эа]**
+
+* a bear [бэа]
+* to bear [бэа]
+* to wear [увэа]
+
+**[ё]**
+
+* to learn [лён]
+* a pearl[пёрл]
+
 http://english-info.ucoz.ru/index/0-5
