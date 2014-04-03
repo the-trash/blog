@@ -8,6 +8,7 @@
 
 * I am
 
+* It is
 * He is
 * She is
 
