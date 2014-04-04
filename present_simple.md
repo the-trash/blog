@@ -56,3 +56,7 @@
 * Does he say about this fact for 3 weeks?
 * Does it change regular teaching process?
 * Does she take a shower when she is dirty?
+
+* When do you read the newspaper?
+* When do you watch on television?
+
