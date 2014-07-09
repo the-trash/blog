@@ -32,3 +32,7 @@ http://learn.javascript.ru/nodejs-screencast
 
 * Идемпотентность http://ru.wikipedia.org/wiki/%D0%98%D0%B4%D0%B5%D0%BC%D0%BF%D0%BE%D1%82%D0%B5%D0%BD%D1%82%D0%BD%D0%BE%D1%81%D1%82%D1%8C
 * JOINS http://www.skillz.ru/dev/php/article-Obyasnenie_SQL_obedinenii_JOIN_INNER_OUTER.html
+
+### JS
+
+http://www.silverstripe.org/javascript-performance/
