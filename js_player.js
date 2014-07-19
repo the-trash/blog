@@ -1,4 +1,3 @@
-```js
 clrscr = function(){ process.stdout.write('\u001B[2J\u001B[0;0f') }
 log = function(){ console.log.apply(console,arguments) }
 
@@ -94,4 +93,4 @@ log(basePlayer.current_track_index); // 0
 
 devider(d_size);
 
-```
+
